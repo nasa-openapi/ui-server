@@ -11,12 +11,13 @@ export default function Home() {
 
       {/* Card content */}
       <div className="relative bg-white/90 backdrop-blur-md rounded-2xl shadow-xl 
-        w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%] max-w-xl overflow-hidden 
+        w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%] max-w-xl 
+        max-h-[80vh] overflow-y-auto 
         transform transition duration-300 hover:scale-105 hover:shadow-10xl hover:shadow-purple-500/40
         grid grid-rows-[1fr_auto]">
         {/* Image */}
         <img
-          src="https://apod.nasa.gov/apod/image/2412/LeonidsWoodcut_Vollmy_960.jpg"
+          src="https://apod.nasa.gov/apod/image/2509/OrionHorseHead_Stern_1080.jpg"
           alt="Today's Picture"
           className="w-full h-auto object-cover"
         />
