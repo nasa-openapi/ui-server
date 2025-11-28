@@ -2,9 +2,16 @@
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const[data, setData] = useState(null);
-  const[loading, setLoading] = useState(true);
-  const[error, setError] = useState(null);
+
+  interface PicData {
+    "title": string;
+    "url": string;
+    "explanation": string;
+    "publishdate": string;
+  }
+  const[data, setData] = useState<PicData|null>(null);
+  const[loading, setLoading] = useState<boolean>(true);
+  const[error, setError] = useState<string|null>(null);
 
   const fetchTodaysPic = async()=>{
       try{
@@ -23,8 +30,8 @@ export default function Home() {
         
       }
       catch(err){
-        console.log("hello");
-        setError(err.message);
+        console.log(err);
+        setError((err as {message: string}).message);
       }finally{
         setLoading(false);
       }
