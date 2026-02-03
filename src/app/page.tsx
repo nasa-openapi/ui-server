@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Home() {
 
@@ -62,12 +63,12 @@ export default function Home() {
       {error && (
         <div className="absolute flex flex-col items-center justify-center bg-white/20 p-6 w-[40%] sm:w-[30%] rounded-2xl shadow-lg space-y-4 z-10">
           {/* Static placeholder image */}
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1080&q=80"
             alt="Placeholder"
             className="w-[20%] sm:w-[60%] md:w-[70%] lg:w-[60%] object-contain"
           />
-          <p className="text-red-600 text-center">Thenga</p>
+          <p className="text-red-600 text-center">{"Could not load Today's Picture!"}</p>
           <button
             onClick={fetchTodaysPic}
             className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
@@ -84,7 +85,7 @@ export default function Home() {
         transform transition duration-300 hover:scale-105 hover:shadow-10xl hover:shadow-purple-500/40
         grid grid-rows-[1fr_auto]">
         {/* Image */}
-        <img
+        <Image
           src={data.url}
           alt="Today's Picture"
           className="w-full h-auto object-cover"
@@ -92,7 +93,7 @@ export default function Home() {
         <div className="flex flex-col">
         <div className="p-6 space-y-4">
           <p className="text-gray-700 leading-relaxed">
-            data.exaplanation
+            {data.explanation}
           </p>
         </div>
 
