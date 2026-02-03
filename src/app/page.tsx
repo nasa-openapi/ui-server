@@ -67,7 +67,7 @@ export default function Home() {
             alt="Placeholder"
             className="w-[20%] sm:w-[60%] md:w-[70%] lg:w-[60%] object-contain"
           />
-          <p className="text-red-600 text-center">Thenga</p>
+          <p className="text-red-600 text-center">Could not load Today's Picture!</p>
           <button
             onClick={fetchTodaysPic}
             className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
@@ -92,7 +92,7 @@ export default function Home() {
         <div className="flex flex-col">
         <div className="p-6 space-y-4">
           <p className="text-gray-700 leading-relaxed">
-            data.exaplanation
+            {data.explanation}
           </p>
         </div>
 
