@@ -13,6 +13,8 @@ export default function Home() {
   const[data, setData] = useState<PicData|null>(null);
   const[loading, setLoading] = useState<boolean>(true);
   const[error, setError] = useState<string|null>(null);
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const fetchTodaysPic = async()=>{
       try{
@@ -41,6 +43,15 @@ export default function Home() {
   
   useEffect(()=>{
     fetchTodaysPic();
+    if ("Notification" in window) {
+      if(Notification.permission === "default"){
+        const timer = setTimeout(() => {
+          setShowToast(true);
+        }, 3000); // Show toast after 3 seconds
+      
+        return () => clearTimeout(timer);
+      }
+    }
   },[]);
 
   
@@ -125,6 +136,38 @@ export default function Home() {
           </div>
         </div>
       </div>
+      )}
+{/* Subscription popup*/ }
+      {showToast && (
+        <div className="fixed bottom-5 right-5 bg-blue-600 text-white p-4 rounded-lg shadow-2xl animate-bounce">
+          <p>Want updates for pictures daily?</p>
+          <button onClick={() => { setShowToast(false); setShowModal(true); }} className="underline font-bold">
+            Yes, notify me!
+          </button>
+        </div>
+      )}
+ 
+      {showModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg text-black">
+            <h2 className="text-xl font-bold">Almost there!</h2>
+            <input id="userName" type="text" placeholder="Your Name" className="border p-2 w-full my-4" />
+            <div className="flex flex-col gap-2 mt-4">
+              <button 
+                //onClick={handleSubscription} 
+                className="w-full bg-green-600 text-white py-3 rounded-xl font-bold order-1"
+              >
+                Subscribe
+              </button>
+              <button 
+                onClick={() => {setShowModal(false); setShowToast(false);} }
+                className="w-full py-2 text-gray-500 text-sm hover:underline order-2"
+              >
+                No thanks, just show me the stars
+              </button>
+            </div>
+          </div>
+        </div>
       )}
       </div>
       
