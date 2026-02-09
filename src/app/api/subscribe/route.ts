@@ -15,14 +15,23 @@ export async function POST(req: NextRequest){
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify({
+                    endpoint: subscription.endpoint,
+                    keys:{
+                        p256dh: subscription.keys.p256dh,
+                        auth: subscription.keys.auth,
+                    },
+                    name: name
+            })
+
         });
-        const json = await response.json();
+        const responseText = await response.text();
         if(!response.ok){
             console.log("Error while sending subscription to backend!!")
-            return NextResponse.json({message: json.message}, {status: response.status});
+            console.log(response);
+            return NextResponse.json({message: responseText}, {status: response.status});
         }else{
-            console.log(json);
+            console.log(responseText);
             return NextResponse.json({message: "Subscription successful"}, {status: 200});
         }
     }catch(err){

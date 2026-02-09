@@ -64,9 +64,9 @@ export default function Home() {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToArrayBuffer("BGmR2oWmH4T2SyXwDmT4qPBfFWvXK86tDjte3ggbb9ufmdAIXFeTPX9NFqQe78dZipxL3TmuDYN13JyJbalyyYE")
       });
-      console.log("Push Subscription:", subscription);
       try{
         const userName = (document.getElementById("userName") as HTMLInputElement)?.value || "";
+        console.log('Subscribing for user: ', userName);
         const response = await fetch('/api/subscribe', {
           method: "POST",
           headers: {
