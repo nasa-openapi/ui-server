@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { PopUpFloating } from "./component/PopUpFloating";
 
 export default function Home() {
 
@@ -201,14 +202,10 @@ export default function Home() {
       </div>
       )}
 {/* Subscription popup*/ }
-      {showToast && (
-        <div className="fixed bottom-5 right-5 bg-blue-600 text-white p-4 rounded-lg shadow-2xl animate-bounce">
-          <p>Want updates for pictures daily?</p>
-          <button onClick={() => { setShowToast(false); setShowModal(true); }} className="underline font-bold">
-            Yes, notify me!
-          </button>
-        </div>
-      )}
+      <PopUpFloating 
+        showToast={showToast} setShowToast={setShowToast} setShowModal={setShowModal}
+      />
+
  
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
@@ -223,7 +220,7 @@ export default function Home() {
                 Subscribe
               </button>
               <button 
-                onClick={() => {setShowModal(false); setShowToast(false);} }
+                onClick={() => {setShowModal(false);} }
                 className="w-full py-2 text-gray-500 text-sm hover:underline order-2"
               >
                 No thanks, just show me the stars
