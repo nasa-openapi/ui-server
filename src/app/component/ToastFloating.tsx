@@ -1,4 +1,4 @@
-export const PopUpFloating =({showToast, setShowToast, setShowModal}: {showToast: boolean, setShowToast: (show: boolean) => void, setShowModal: (show: boolean) => void})=>{
+export const ToastFloating =({showToast, setShowToast, setShowModal}: {showToast: boolean, setShowToast: (show: boolean) => void, setShowModal: (show: boolean) => void})=>{
     return (
         <>
         {showToast && (
