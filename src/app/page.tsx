@@ -1,6 +1,8 @@
 "use client"
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { ToastFloating } from "./component/ToastFloating";
+import { SubscriptionDialog } from "./component/SubscriptionDialog";
 
 export default function Home() {
 
@@ -16,20 +18,7 @@ export default function Home() {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  function urlBase64ToArrayBuffer(base64String: string): ArrayBuffer {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-
-    const rawData = atob(base64);
-    const buffer = new ArrayBuffer(rawData.length);
-    const view = new Uint8Array(buffer);
-
-    for (let i = 0; i < rawData.length; i++) {
-      view[i] = rawData.charCodeAt(i);
-    }
-
-  return buffer;
-}
+  
 
   const fetchTodaysPic = async()=>{
       try{
@@ -54,46 +43,6 @@ export default function Home() {
         setLoading(false);
       }
     };
-
-  const handleSubscription = async()=>{
-    
-    const permission = await Notification.requestPermission();
-    if (permission === "granted"){
-      const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToArrayBuffer("BGmR2oWmH4T2SyXwDmT4qPBfFWvXK86tDjte3ggbb9ufmdAIXFeTPX9NFqQe78dZipxL3TmuDYN13JyJbalyyYE")
-      });
-      try{
-        const userName = (document.getElementById("userName") as HTMLInputElement)?.value || "";
-        console.log('Subscribing for user: ', userName);
-        const response = await fetch('/api/subscribe', {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            subscription,
-          name: userName})
-        });
-        const json = await response.json();
-        if(!response.ok){
-          console.log("Error while subscribing for notifications!!")
-          alert("Subscription failed: "+json.message);
-        }else{
-          setShowModal(false)
-          alert("Subscribed successfully! You will receive daily updates.");
-        }
-      }catch(err){
-        console.log(err);
-        alert("Subscription failed: "+(err as {message: string}).message);
-      }
-    }else{
-      alert("Notification permission denied. Please allow notifications to subscribe.");
-    }   
-
-
-  }
 
   
   useEffect(()=>{
@@ -200,38 +149,14 @@ export default function Home() {
         </div>
       </div>
       )}
-{/* Subscription popup*/ }
-      {showToast && (
-        <div className="fixed bottom-5 right-5 bg-blue-600 text-white p-4 rounded-lg shadow-2xl animate-bounce">
-          <p>Want updates for pictures daily?</p>
-          <button onClick={() => { setShowToast(false); setShowModal(true); }} className="underline font-bold">
-            Yes, notify me!
-          </button>
-        </div>
-      )}
- 
-      {showModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg text-black">
-            <h2 className="text-xl font-bold">Almost there!</h2>
-            <input id="userName" type="text" placeholder="Your Name" className="border p-2 w-full my-4" />
-            <div className="flex flex-col gap-2 mt-4">
-              <button 
-                onClick={handleSubscription} 
-                className="w-full bg-green-600 text-white py-3 rounded-xl font-bold order-1"
-              >
-                Subscribe
-              </button>
-              <button 
-                onClick={() => {setShowModal(false); setShowToast(false);} }
-                className="w-full py-2 text-gray-500 text-sm hover:underline order-2"
-              >
-                No thanks, just show me the stars
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+{/* Subscription Toast popup*/ }
+      <ToastFloating 
+        showToast={showToast} setShowToast={setShowToast} setShowModal={setShowModal}
+      />
+{/* Subscription Modal Dialog*/ }
+      <SubscriptionDialog
+        showModal={showModal} setShowModal={setShowModal}
+      />
       </div>
       
    
