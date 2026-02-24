@@ -1,10 +1,10 @@
 "use client"
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { ToastFloating } from "./component/ToastFloating";
 import { SubscriptionDialog } from "./component/SubscriptionDialog";
 import { TodaysPictureErrorCard } from "./component/TodaysPictureErrorCard";
 import { PicofDay } from "./component/PicOfDay";
+
 
 export default function Home() {
 
@@ -92,6 +92,7 @@ export default function Home() {
       <ToastFloating showToast={showToast} setShowToast={setShowToast} setShowModal={setShowModal}/>
       {/* Subscription Modal Dialog*/ }
       <SubscriptionDialog showModal={showModal} setShowModal={setShowModal}/>
+
       </div>
       
    
