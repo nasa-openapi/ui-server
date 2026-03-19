@@ -1,6 +1,6 @@
 export async function GET(){
     const todaysPicUrl = "/nasa/v1/picOfDay/getTodaysPic";
-    const serverUrl ="https://nasa-openapi-7db33b5a14d9.herokuapp.com";
+    const serverUrl = process.env.HEROKU_ENDPOINT;
     try{
         const response = await fetch(serverUrl+todaysPicUrl);
         

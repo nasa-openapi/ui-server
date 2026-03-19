@@ -4,6 +4,7 @@ import { ToastFloating } from "./component/ToastFloating";
 import { SubscriptionDialog } from "./component/SubscriptionDialog";
 import { TodaysPictureErrorCard } from "./component/TodaysPictureErrorCard";
 import { PicofDay } from "./component/PicOfDay";
+import { SearchBox } from "./component/SeachBox";
 
 
 export default function Home() {
@@ -19,6 +20,8 @@ export default function Home() {
   const[error, setError] = useState<string|null>(null);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
 
   
 
@@ -71,7 +74,7 @@ export default function Home() {
   
   return (
     <div
-      className="relative flex items-center justify-center min-h-screen bg-black bg-no-repeat bg-center bg-cover"
+      className="relative flex flex-col items-center justify-center min-h-screen bg-black bg-no-repeat bg-center bg-cover"
       style={{
         backgroundImage: "url('https://apod.nasa.gov/apod/image/2509/OrionHorseHead_Stern_1080.jpg')"
       }}
@@ -79,12 +82,15 @@ export default function Home() {
       {/* Dark translucent overlay */}
       <div className="absolute -inset-2 bg-purple-500/20 rounded-3xl blur-xl"/>
 
+
+      
       {loading && (
         <div className="absolute flex flex-col items-center justify-center bg-black/50 p-6 rounded-2xl space-y-4">
           <p className="text-white text-lg animate-pulse">Loading NASA Picture of the Day...</p>
         </div>
       )}
 
+      <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
       <TodaysPictureErrorCard error={!!error} fetchTodaysPic={fetchTodaysPic}/>
       {/* Card content */}
       <PicofDay data={data!}/>  
