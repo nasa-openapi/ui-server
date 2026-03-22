@@ -71,6 +71,25 @@ export default function Home() {
     return () => clearTimeout(timer); 
   },[]);
 
+
+  const handleSearch = async()=>{
+    if(selectedDate == searchQuery){
+      const response = await fetch(`/api/nasa/date/${selectedDate}`);
+      const json = await response.json();
+      if(!response.ok){
+        console.log("Error while getting response from backend!!")
+        setError(json.message);
+        return response;
+      }else{
+        console.log(json);
+        setData(json);
+      }
+    }else{
+      //fetch pic based on keyword search - currently not supported by backend, so showing error toast
+      setError("Keyword search is currently not supported. Please search by date.");
+    }
+    }
+
   
   return (
     <div
@@ -90,7 +109,7 @@ export default function Home() {
         </div>
       )}
 
-      <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+      <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedDate={selectedDate} setSelectedDate={setSelectedDate} onSearch={handleSearch}/>
       <TodaysPictureErrorCard error={!!error} fetchTodaysPic={fetchTodaysPic}/>
       {/* Card content */}
       <PicofDay data={data!}/>  
