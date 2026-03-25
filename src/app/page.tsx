@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react";
+import {useRouter, useSearchParams} from "next/navigation";
 import { ToastFloating } from "./component/ToastFloating";
 import { SubscriptionDialog } from "./component/SubscriptionDialog";
 import { TodaysPictureErrorCard } from "./component/TodaysPictureErrorCard";
@@ -15,6 +16,9 @@ export default function Home() {
     "explanation": string;
     "publishdate": string;
   }
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const[data, setData] = useState<PicData|null>(null);
   const[loading, setLoading] = useState<boolean>(true);
   const[error, setError] = useState<string|null>(null);
@@ -22,17 +26,20 @@ export default function Home() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
-
+  const dateFromQuery = searchParams.get("date") || "";
   
 
-  const fetchTodaysPic = async()=>{
+  const fetchPic = async(route: string)=>{
+    setLoading(true);
+    setError(null);
+    setData(null);
       try{
-        const response = await fetch('/api/nasa');
+        const response = await fetch(route);
         const json = await response.json();
         if(!response.ok){
-          
           console.log("Error while getting response from backend!!")
-          
+          console.log(json);
+          console.log(response);
           setError(json.message);
           return response;
         }else{
@@ -49,9 +56,8 @@ export default function Home() {
       }
     };
 
-  
+  // Register service worker and show subscription toast
   useEffect(()=>{
-    fetchTodaysPic();
     //register service worker for push notifications
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js')
@@ -71,24 +77,24 @@ export default function Home() {
     return () => clearTimeout(timer); 
   },[]);
 
+  //redirection based on url query for date search
+  useEffect(()=>{
+    if(dateFromQuery){
+      fetchPic(`/api/nasa/date/${dateFromQuery}`);
+    }else{
+      fetchPic("/api/nasa");
+    }
+  },[dateFromQuery]);
+
 
   const handleSearch = async()=>{
-    if(selectedDate == searchQuery){
-      const response = await fetch(`/api/nasa/date/${selectedDate}`);
-      const json = await response.json();
-      if(!response.ok){
-        console.log("Error while getting response from backend!!")
-        setError(json.message);
-        return response;
-      }else{
-        console.log(json);
-        setData(json);
-      }
+    if(selectedDate){
+      router.push(`/?date=${selectedDate}`);
     }else{
-      //fetch pic based on keyword search - currently not supported by backend, so showing error toast
-      setError("Keyword search is currently not supported. Please search by date.");
+      router.push(`/`);
+
     }
-    }
+  }
 
   
   return (
@@ -110,9 +116,13 @@ export default function Home() {
       )}
 
       <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedDate={selectedDate} setSelectedDate={setSelectedDate} onSearch={handleSearch}/>
-      <TodaysPictureErrorCard error={!!error} fetchTodaysPic={fetchTodaysPic}/>
-      {/* Card content */}
-      <PicofDay data={data!}/>  
+      {error?(
+        <TodaysPictureErrorCard
+          error={!!error}
+          fetchTodaysPic={() => fetchPic("/api/nasa")}
+          />):
+          (data && <PicofDay data={data}/>)
+      }
       {/* Subscription Toast popup*/ }
       <ToastFloating showToast={showToast} setShowToast={setShowToast} setShowModal={setShowModal}/>
       {/* Subscription Modal Dialog*/ }

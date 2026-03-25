@@ -12,7 +12,7 @@ export async function GET(
     if (!response.ok) {
       const errorData = await response.json();
       return NextResponse.json(
-        { error: errorData.message || 'Error fetching picture by date' },
+        { message: errorData.message || 'Error fetching picture by date' },
         { status: response.status }
       );
     }

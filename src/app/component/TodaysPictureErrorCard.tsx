@@ -4,7 +4,7 @@ export const TodaysPictureErrorCard = ({error, fetchTodaysPic}: {error: boolean,
     return (
         <>
         {error && (
-        <div className="relative flex flex-col items-center justify-center bg-black/50 backdrop-blur-md border border-white/10 rounded-[2rem] px-8 py-4 sm:px-12 sm:py-6 shadow-2xl max-w-[95%] w-[600px] mx-auto overflow-hidden">
+        <div className="relative z-50 flex flex-col items-center justify-center bg-black/50 backdrop-blur-md border border-white/10 rounded-[2rem] px-8 py-4 sm:px-12 sm:py-6 shadow-2xl max-w-[95%] w-[600px] mx-auto overflow-hidden">
            
            {/* 1. The Container for the Placeholder Image */}
            <div className="relative w-48 h-32 sm:w-64 sm:h-44 -mt-8 sm:-mt-12 mb-4">
