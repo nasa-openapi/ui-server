@@ -1,7 +1,8 @@
 import React, {useRef} from "react";
 
-export const SearchBox =({searchQuery, setSearchQuery, selectedDate, setSelectedDate, onSearch}:
-     {searchQuery: string; setSearchQuery: (query: string) => void; selectedDate: string; setSelectedDate: (date: string) => void; onSearch: () => void}) => {
+export const SearchBox =({searchQuery, setSearchQuery, selectedDate, setSelectedDate, onSearch, isLoading}:
+     {searchQuery: string; setSearchQuery: (query: string) => void; selectedDate: string; 
+        setSelectedDate: (date: string) => void; onSearch: () => void; isLoading: boolean}) => {
 
         const dateInputRef = useRef<HTMLInputElement>(null);
         const handleSubmit = (e: React.FormEvent) => {

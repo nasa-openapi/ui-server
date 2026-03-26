@@ -22,7 +22,7 @@ export const TodaysPictureErrorCard = ({error, fetchTodaysPic}: {error: boolean,
            </h2>
          {/* 4. Soft Orange Subtext */}
          <p className="text-orange-200/80 font-bold text-center text-sm sm:text-base mt-4 max-w-[320px] sm:max-w-md mx-auto leading-relaxed drop-shadow-sm">
-           Today&apos;s image is currently hiding in a black hole.
+           The picture&apos;s currently hiding in a black hole.
            <br className="hidden sm:block" /> 
            We&apos;ve sent a search party, but space is big. Really big.
          </p>

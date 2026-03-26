@@ -3,19 +3,22 @@ import { useEffect, useState } from "react";
 import {useRouter, useSearchParams} from "next/navigation";
 import { ToastFloating } from "./component/ToastFloating";
 import { SubscriptionDialog } from "./component/SubscriptionDialog";
-import { TodaysPictureErrorCard } from "./component/TodaysPictureErrorCard";
+import { TodaysPictureErrorCard } from "./component/PictureErrorCard";
 import { PicofDay } from "./component/PicOfDay";
 import { SearchBox } from "./component/SeachBox";
 
 
-export default function Home() {
-
-  interface PicData {
+export interface PicData {
     "title": string;
     "url": string;
     "explanation": string;
-    "publishdate": string;
+    "copyright": string;
   }
+
+
+export default function Home() {
+
+  
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -29,12 +32,12 @@ export default function Home() {
   const dateFromQuery = searchParams.get("date") || "";
   
 
-  const fetchPic = async(route: string)=>{
+  const fetchPic = async(route: string, signal: AbortSignal)=>{
     setLoading(true);
     setError(null);
     setData(null);
       try{
-        const response = await fetch(route);
+        const response = await fetch(route, { signal });
         const json = await response.json();
         if(!response.ok){
           console.log("Error while getting response from backend!!")
@@ -48,9 +51,10 @@ export default function Home() {
         }
         
       }
-      catch(err){
+      catch(err: any){
+        if (err.name === 'AbortError') return;
         console.log(err);
-        setError((err as {message: string}).message);
+        setError((err as {message: string}).message || "An unexpected error occurred while fetching the picture.");
       }finally{
         setLoading(false);
       }
@@ -79,10 +83,11 @@ export default function Home() {
 
   //redirection based on url query for date search
   useEffect(()=>{
+    const controller = new AbortController();
     if(dateFromQuery){
-      fetchPic(`/api/nasa/date/${dateFromQuery}`);
+      fetchPic(`/api/nasa/date/${dateFromQuery}`, controller.signal);
     }else{
-      fetchPic("/api/nasa");
+      fetchPic("/api/nasa", controller.signal);
     }
   },[dateFromQuery]);
 
@@ -115,11 +120,13 @@ export default function Home() {
         </div>
       )}
 
-      <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedDate={selectedDate} setSelectedDate={setSelectedDate} onSearch={handleSearch}/>
+      <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} 
+        selectedDate={selectedDate} setSelectedDate={setSelectedDate} 
+        onSearch={handleSearch} isLoading={loading} />
       {error?(
         <TodaysPictureErrorCard
           error={!!error}
-          fetchTodaysPic={() => fetchPic("/api/nasa")}
+          fetchTodaysPic={() => router.push("/")}
           />):
           (data && <PicofDay data={data}/>)
       }
