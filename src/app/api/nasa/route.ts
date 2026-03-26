@@ -1,20 +1,24 @@
+import { NextResponse } from "next/server";
 export async function GET(){
     const todaysPicUrl = "/nasa/v1/picOfDay/getTodaysPic";
-    const serverUrl ="https://nasa-openapi-7db33b5a14d9.herokuapp.com";
+    const serverUrl = process.env.HEROKU_ENDPOINT;
     try{
         const response = await fetch(serverUrl+todaysPicUrl);
         
         if(!response.ok){
           const errorBody = await response.json().catch(() => ({})); // safely parse error body
-            return Response.json(
+            return NextResponse.json(
                 { message: errorBody.message },
                 { status: response.status }
             );
         }
         
         const json = await response.json();
-        return Response.json(json);
+        return NextResponse.json(json);
     }catch(err){
-        return Response.json({error: err.message},{status:500});
+        return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
     }
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest){
     const subscribeUrl = "/nasa/v1/test/subscribe";
-    const serverUrl ="https://nasa-openapi-7db33b5a14d9.herokuapp.com";
+    const serverUrl = process.env.HEROKU_ENDPOINT;
     try{
         var body = await req.json();
         const subscription = body.subscription;
