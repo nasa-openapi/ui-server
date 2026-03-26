@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react";
+import { useCallback } from "react";
 import {useRouter, useSearchParams} from "next/navigation";
 import { ToastFloating } from "./component/ToastFloating";
 import { SubscriptionDialog } from "./component/SubscriptionDialog";
@@ -32,7 +33,7 @@ export default function Home() {
   const dateFromQuery = searchParams.get("date") || "";
   
 
-  const fetchPic = async(route: string, signal: AbortSignal)=>{
+  const fetchPic = useCallback(async(route: string, signal: AbortSignal)=>{
     setLoading(true);
     setError(null);
     setData(null);
@@ -58,7 +59,7 @@ export default function Home() {
       }finally{
         setLoading(false);
       }
-    };
+    },[]);
 
   // Register service worker and show subscription toast
   useEffect(()=>{
@@ -89,7 +90,8 @@ export default function Home() {
     }else{
       fetchPic("/api/nasa", controller.signal);
     }
-  },[dateFromQuery]);
+    return () => controller.abort();
+  },[dateFromQuery,fetchPic]);
 
 
   const handleSearch = async()=>{

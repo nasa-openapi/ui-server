@@ -51,6 +51,7 @@ export const SearchBox =({searchQuery, setSearchQuery, selectedDate, setSelected
                         <input 
                             type="date"
                             ref={dateInputRef}
+                            value={selectedDate}
                             className="absolute opacity-0 pointer-events-none w-0"
                             onChange={(e) => {
                                 setSelectedDate(e.target.value);
@@ -72,8 +73,12 @@ export const SearchBox =({searchQuery, setSearchQuery, selectedDate, setSelected
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    className="ml-2 p-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full 
-                    shadow-lg transition-transform active:scale-95 flex items-center justify-center"
+                    disabled={isLoading}
+                    className={`ml-2 p-4 text-white rounded-full shadow-lg transition-all flex items-center justify-center
+                    ${isLoading 
+                        ? "bg-gray-400 cursor-not-allowed opacity-70" // 2. Styles for loading state
+                        : "bg-purple-600 hover:bg-purple-700 active:scale-95" // 3. Normal styles
+                    }`}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
