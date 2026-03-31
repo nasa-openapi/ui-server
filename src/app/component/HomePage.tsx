@@ -122,9 +122,13 @@ export default function HomePage() {
         </div>
       )}
 
-      <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} 
+      {
+        !loading && (
+          <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} 
         selectedDate={selectedDate} setSelectedDate={setSelectedDate} 
         onSearch={handleSearch} isLoading={loading} />
+        )
+      }
       {error?(
         <TodaysPictureErrorCard
           error={!!error}
