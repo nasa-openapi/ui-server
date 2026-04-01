@@ -18,10 +18,11 @@ export const SearchBox =({searchQuery, setSearchQuery, selectedDate, setSelected
             }
         }
     return (
-        <form onSubmit={handleSubmit} className="z-20 w-full max-w-md mb-8">
+        <form onSubmit={handleSubmit} className="z-20 w-full max-w-md px-4 mb-8 flex justify-center">
             <div className = "relative flex items-center group">
                 <div className="relative flex-grow flex items-center bg-white/90 border border-gray-200 rounded-full px-4 py-1.5 shadow-lg transition-all duration-300 focus-within:ring-2 focus-within:ring-purple-500/30">
                     {/* 1. THE TEXT INPUT (First) */}
+                    {!selectedDate ? (
                     <input
                         type="text"
                         placeholder={selectedDate ? "" : "Search keywords or pick a date..."}
@@ -30,20 +31,19 @@ export const SearchBox =({searchQuery, setSearchQuery, selectedDate, setSelected
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className={`flex-grow bg-transparent py-1.5 text-black placeholder-gray-500 outline-none ${selectedDate ? 'text-gray-400 font-medium cursor-default' : ''}`}
                     />
-                    {/* 2. THE DATE PILL (Second - nested before the icon) */}
-                    {selectedDate && (
+                    ):(
                         <div className="flex items-center gap-1 mx-2 px-3 py-1 bg-purple-600 text-white text-xs font-bold rounded-full animate-in slide-in-from-right-2 duration-200">
-                            <span className="whitespace-nowrap">{selectedDate}</span>
-                            <button 
-                                type="button" 
-                                onClick={clearDate}
-                                className="ml-1 p-0.5 hover:bg-white/20 rounded-full transition-colors"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
+                        <span className="whitespace-nowrap">{selectedDate}</span>
+                        <button 
+                            type="button" 
+                            onClick={clearDate}
+                            className="ml-1 p-0.5 hover:bg-white/20 rounded-full transition-colors"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
                     )}
 
                     {/* 3. DATE PICKER ICON */}

@@ -18,9 +18,30 @@
     --foreground: #ededed;
   }
 }
+html {
+  background-image: url('https://apod.nasa.gov/apod/image/2509/OrionHorseHead_Stern_1080.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-color: black;
+}
 
 body {
-  background: var(--background);
+  
+  
+  background: transparent; 
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure the Next.js root div expands */
+#___next, [data-reactroot] {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
