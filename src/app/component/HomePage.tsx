@@ -105,44 +105,53 @@ export default function HomePage() {
 
   
   return (
-    <div
-      className="relative flex flex-col items-center justify-center min-h-screen bg-black bg-no-repeat bg-center bg-cover"
-      style={{
-        backgroundImage: "url('https://apod.nasa.gov/apod/image/2509/OrionHorseHead_Stern_1080.jpg')"
-      }}
-    >
-      {/* Dark translucent overlay */}
-      <div className="absolute -inset-2 bg-purple-500/20 rounded-3xl blur-xl"/>
-
-
+    /* min-h-screen: ensures the page is at least as tall as the device.
+       The background is now handled in globals.css on the <html> tag.
+    */
+    <div className="relative flex flex-col items-center justify-center min-h-screen w-full py-10">
       
+      {/* THE BLUR OVERLAY: 
+         Changed to 'fixed' so it stays put even when you stretch the page.
+      */}
+      <div className="fixed inset-0 bg-purple-500/10 blur-3xl pointer-events-none -z-10" />
+
+      {/* LOADING STATE: 
+         Used 'fixed' and 'inset-0' to keep it perfectly centered 
+         over the background while the data fetches.
+      */}
       {loading && (
-        <div className="absolute flex flex-col items-center justify-center bg-black/50 p-6 rounded-2xl space-y-4">
-          <p className="text-white text-lg animate-pulse">Loading NASA Picture of the Day...</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+          <div className="bg-black/60 border border-white/10 p-8 rounded-3xl shadow-2xl flex flex-col items-center space-y-4">
+            {/* You could add a Spinner component here too */}
+            <p className="text-white text-lg font-medium animate-pulse tracking-wide">
+              Exploring the Cosmos...
+            </p>
+          </div>
         </div>
       )}
 
-      {
-        !loading && (
-          <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} 
-        selectedDate={selectedDate} setSelectedDate={setSelectedDate} 
-        onSearch={handleSearch} isLoading={loading} />
-        )
-      }
-      {error?(
-        <TodaysPictureErrorCard
-          error={!!error}
-          fetchTodaysPic={() => router.push("/")}
-          />):
-          (data && <PicofDay data={data}/>)
-      }
-      {/* Subscription Toast popup*/ }
-      <ToastFloating showToast={showToast} setShowToast={setShowToast} setShowModal={setShowModal}/>
-      {/* Subscription Modal Dialog*/ }
-      <SubscriptionDialog showModal={showModal} setShowModal={setShowModal}/>
+      {/* MAIN CONTENT LAYER */}
+      <div className="relative z-10 w-full max-w-4xl px-4 flex flex-col items-center">
+        {!loading && (
+          <SearchBox 
+            searchQuery={searchQuery} 
+            setSearchQuery={setSearchQuery} 
+            selectedDate={selectedDate} 
+            setSelectedDate={setSelectedDate} 
+            onSearch={handleSearch} 
+            isLoading={loading} 
+          />
+        )}
 
+        {error ? (
+          <TodaysPictureErrorCard error={!!error} fetchTodaysPic={() => router.push("/")} />
+        ) : (
+          data && <PicofDay data={data} />
+        )}
       </div>
-      
-   
+
+      <ToastFloating showToast={showToast} setShowToast={setShowToast} setShowModal={setShowModal} />
+      <SubscriptionDialog showModal={showModal} setShowModal={setShowModal} />
+    </div>
   );
 }
